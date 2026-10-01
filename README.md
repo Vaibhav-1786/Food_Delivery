@@ -1,10 +1,30 @@
 # Quickbite — Full-Stack Food Delivery Web Application
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61dafb)
+![Flask](https://img.shields.io/badge/Backend-Python%20%2F%20Flask-000000)
+![MySQL](https://img.shields.io/badge/Database-MySQL%208-4479a1)
+![Razorpay](https://img.shields.io/badge/Payments-Razorpay-0c2451)
+
 A full-stack food delivery platform with three separate portals — **Customer**, **Restaurant**,
 and **Admin** — built with **React (Vite)** on the frontend, **Python/Flask** on the backend, and
 **MySQL** for storage. It goes well beyond a basic ordering flow: loyalty & referrals, group
 ordering, meal planning, subscriptions, flash sales, surplus deals, fraud detection, disputes,
 and more are all included.
+
+## Table of contents
+
+1. [What's included](#1-whats-included)
+2. [Project structure](#2-project-structure)
+3. [Prerequisites](#3-prerequisites)
+4. [Backend setup](#4-backend-setup)
+5. [Frontend setup](#5-frontend-setup)
+6. [Logging in](#6-logging-in)
+7. [Integrations that need your own credentials](#7-integrations-that-need-your-own-credentials)
+8. [Security notes](#8-security-notes)
+9. [Extending further](#9-extending-further)
+10. [Contributing](#10-contributing)
+11. [License](#11-license)
 
 # Architecture of Food Delivery 
 <img width="5796" height="5520" alt="Architecture" src="https://github.com/user-attachments/assets/078bb840-190b-42d9-9abd-611e422f8537" />
@@ -41,6 +61,15 @@ and more are all included.
   customer's token cannot call restaurant/admin endpoints, and vice versa
 - Passwords hashed with bcrypt, JWT session tokens, server-side validation on all sensitive
   operations (wallet debits, GK rewards, Razorpay signature verification, fraud checks)
+
+### Tech stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React (Vite), Axios, React contexts (Auth, Cart, Theme, Authority) |
+| Backend | Python 3.10+, Flask REST API, SQLAlchemy models, JWT, bcrypt |
+| Database | MySQL 8.0+ (schema + 14 incremental migrations) |
+| Integrations | Razorpay, Google Sign-In, SMTP email OTP, OpenRouter (AI), optional SMS provider |
 
 ---
 
@@ -86,6 +115,8 @@ food-delivery-app/
 │   │                        hashed password-reset tokens, and real email OTP support
 │   └── seed.sql              States/cities/categories/GK questions (restaurants/foods/admin are
 │                              seeded via seed_runner.py so passwords are hashed correctly)
+├── LICENSE
+├── SECURITY.md
 └── README.md                 (this file)
 ```
 
@@ -341,6 +372,8 @@ default (free tier, no credit card required). Set `AI_API_KEY` in `backend/.env`
   restaurant before allowing edits — cross-restaurant tampering returns 404.
 - A dedicated fraud-detection service and admin fraud center flag suspicious activity for review.
 
+To report a vulnerability, or for the production deployment checklist, see **[SECURITY.md](SECURITY.md)**.
+
 ---
 
 ## 9. Extending further
@@ -349,3 +382,17 @@ This is a large, working v1 covering all core and advanced flows end-to-end. Nat
 push/email notifications wired to a real provider, image uploads for food/restaurant photos
 (currently URL-based), a production WSGI server (gunicorn) + reverse proxy in front of Flask, and
 automated tests around the pricing/wallet/fraud services.
+
+---
+
+## 10. Contributing
+
+Issues and pull requests are welcome. For larger changes please open an issue first, keep database
+migrations additive and numbered in order, and never commit secrets (`.env`, API keys, App
+Passwords).
+
+---
+
+## 11. License
+
+Released under the [MIT License](LICENSE) © 2026 Vaibhav Chauhan.
