@@ -1,33 +1,56 @@
 # Security Policy
 
-## Supported Versions
+Quickbite handles user accounts, wallet balances and payment flows. Security reports are taken seriously.
 
-This project is actively maintained on the `main` branch. Only the latest commit on `main` receives security fixes.
+## Supported versions
 
-| Branch      | Supported          |
-| ----------- | ------------------ |
-| `main`      | :white_check_mark: |
-| older forks | :x:                 |
+Only the latest commit on the `main` branch receives security fixes.
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
-If you discover a security vulnerability in this project, please report it responsibly:
+**Please do not open a public issue for security problems.**
 
-- **Do not** open a public GitHub issue for security vulnerabilities.
-- Instead, report it privately via [GitHub Security Advisories](../../security/advisories/new) or by contacting the maintainer directly.
-- Please include steps to reproduce, potential impact, and any suggested fix if available.
+1. Use GitHub's private reporting: **Security → Report a vulnerability** on this repository (preferred), or
+2. Email the maintainer, Vaibhav Chauhan, at `<your-email@example.com>` *(replace before publishing)*.
 
-You can expect an initial response within **3-5 days**. Confirmed vulnerabilities will be patched as soon as possible, and credit will be given in the release notes (unless you prefer to remain anonymous).
+Please include a description, impact, steps to reproduce (endpoint, role, request/response) and a suggested fix if you have one. You can expect an acknowledgement within **7 days** and a status update within **14 days**. Please allow reasonable time for a fix before public disclosure.
 
-## Security Measures Already in Place
+### In scope
+Role bypass between customer / restaurant / admin, cross-restaurant data access, wallet or GK-reward manipulation, Razorpay signature-verification bypass, OTP / password-reset flaws, JWT issues, injection, secrets exposure.
 
-- Passwords are hashed using **bcrypt** — never stored or returned in plaintext.
-- Authentication uses **JWT tokens** with role-based access control enforced on the backend (not just hidden in the UI).
-- Payment verification (Razorpay) is handled **server-side**, and secret keys are never exposed to the frontend.
-- Wallet balance checks and debits happen entirely server-side to prevent client-side tampering.
-- Sensitive routes are protected by role-specific middleware (`@token_required`).
+### Out of scope
+Issues that only exist when development defaults are left in production (see checklist), denial of service by volume, missing rate limiting on its own, social engineering, and flaws in third-party services (Razorpay, Google, OpenRouter, SMTP providers).
 
-## Known Limitations (Development Setup)
+## Security measures in the project
 
-- OTP verification and password reset currently run in **debug mode** (`OTP_DEBUG_MODE=1`) with no real SMS/email provider wired in — intended for local development/testing only.
-- Before deploying to production, rotate all default/seeded credentials and configure real OTP/email providers.
+- Passwords hashed with bcrypt; password hashes are never returned by the API.
+- JWT tokens carry the role; sensitive routes are restricted with `@token_required([...])` on the backend.
+- Wallet debits, GK rewards, Razorpay signature checks and fraud checks run server-side only.
+- GK rewards can pay out once per session (unique constraint on `game_rewards.session_id`).
+- Email OTPs are stored only as SHA-256 hashes, are single-use, purpose-scoped, expire (default 5 min), limit attempts (default 5) and enforce a resend cooldown.
+- Password reset uses short-lived, single-use hashed tokens; forgot-password responses are generic to avoid account enumeration.
+- Restaurant resources are checked for ownership before edit (cross-restaurant access returns 404).
+- Fraud-detection service and admin fraud center flag suspicious activity.
+
+## Production deployment checklist
+
+The repository ships with **development defaults**. Before going live:
+
+- [ ] Set long random values for `SECRET_KEY` and `JWT_SECRET_KEY`.
+- [ ] Change or delete the seeded accounts (`admin@fooddelivery.com / Admin@123`, and the four `Restaurant@123` restaurants).
+- [ ] Set `OTP_DEBUG_MODE=0` (when on, mobile OTP codes are returned in API responses) and wire a real SMS provider.
+- [ ] Set `EMAIL_ENABLED=1` with working SMTP credentials.
+- [ ] Configure `DB_HOST` / `DB_USER` — without them the app silently falls back to a local SQLite file, which is for quick tests only.
+- [ ] Use a dedicated MySQL user with least privilege, not `root`.
+- [ ] Do not run the Flask development server; use gunicorn (or similar) behind a reverse proxy with HTTPS.
+- [ ] Set `FRONTEND_URL` and CORS settings to your real domain.
+- [ ] Never commit `backend/.env`; keep `MAIL_*`, `RAZORPAY_KEY_SECRET` and `AI_API_KEY` backend-only (never in `VITE_*` variables).
+- [ ] Use live Razorpay keys only over HTTPS and verify webhooks/signatures in production.
+- [ ] Add rate limiting on login, OTP and password-reset endpoints.
+
+## Known limitations
+
+- No automated test suite yet.
+- Mobile OTP has no real SMS gateway wired in by default.
+- Food and restaurant images are URL-based (no upload validation surface yet).
+- The AI assistant sends user prompts to a third-party provider (OpenRouter).
