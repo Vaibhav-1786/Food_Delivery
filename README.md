@@ -77,7 +77,7 @@ and more are all included.
 
 See the Food Delivery platform in action:
 
-👉 **[Watch the Demo Video](https://ireel.today/v/a406df751c)**
+👉 **[Watch The Demo Video](https://ireel.today/v/a406df751c)**
 
 ---
 
