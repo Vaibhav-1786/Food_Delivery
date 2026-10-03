@@ -15,16 +15,17 @@ and more are all included.
 ## Table of contents
 
 1. [What's included](#1-whats-included)
-2. [Project structure](#2-project-structure)
-3. [Prerequisites](#3-prerequisites)
-4. [Backend setup](#4-backend-setup)
-5. [Frontend setup](#5-frontend-setup)
-6. [Logging in](#6-logging-in)
-7. [Integrations that need your own credentials](#7-integrations-that-need-your-own-credentials)
-8. [Security notes](#8-security-notes)
-9. [Extending further](#9-extending-further)
-10. [Contributing](#10-contributing)
-11. [License](#11-license)
+2. [Project Demo](#2-Project-Demo)
+3. [Project structure](#2-project-structure)
+4. [Prerequisites](#3-prerequisites)
+5. [Backend setup](#4-backend-setup)
+6. [Frontend setup](#5-frontend-setup)
+7. [Logging in](#6-logging-in)
+8. [Integrations that need your own credentials](#7-integrations-that-need-your-own-credentials)
+9. [Security notes](#8-security-notes)
+10. [Extending further](#9-extending-further)
+11. [Contributing](#10-contributing)
+12. [License](#11-license)
 
 # Architecture of Food Delivery 
 <img width="5796" height="5520" alt="Architecture" src="https://github.com/user-attachments/assets/078bb840-190b-42d9-9abd-611e422f8537" />
@@ -72,8 +73,13 @@ and more are all included.
 | Integrations | Razorpay, Google Sign-In, SMTP email OTP, OpenRouter (AI), optional SMS provider |
 
 ---
+## 2. project Demo
 
-## 2. Project structure
+https://ireel.today/v/a406df751c
+
+---
+
+## 3. Project structure
 
 ```
 food-delivery-app/
@@ -122,7 +128,7 @@ food-delivery-app/
 
 ---
 
-## 3. Prerequisites
+## 4. Prerequisites
 
 - Python 3.10+
 - Node.js 18+ and npm
@@ -133,7 +139,7 @@ food-delivery-app/
 
 ---
 
-## 4. Backend setup
+## 5. Backend setup
 
 ```bash
 cd food-delivery-app/backend
@@ -210,7 +216,7 @@ The API will be available at `http://localhost:5000/api`. Check `http://localhos
 
 ---
 
-## 5. Frontend setup
+## 6. Frontend setup
 
 ```bash
 cd food-delivery-app/frontend
@@ -230,7 +236,7 @@ npm run build      # outputs to frontend/dist — serve with any static host / n
 
 ---
 
-## 6. Logging in
+## 7. Logging in
 
 - **Customer**: `http://localhost:5173/register` (OTP is simulated by default — see below), or
   "Continue with Google" if `VITE_GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_ID` are configured
@@ -258,7 +264,7 @@ These accounts are created automatically the first time you run
 
 ---
 
-## 7. Integrations that need your own credentials
+## 8. Integrations that need your own credentials
 
 ### OTP (mobile verification)
 No SMS gateway is configured. In `OTP_DEBUG_MODE=1` (the default), the generated OTP code is
@@ -357,7 +363,7 @@ default (free tier, no credit card required). Set `AI_API_KEY` in `backend/.env`
 
 ---
 
-## 8. Security notes
+## 9. Security notes
 
 - Passwords are hashed with bcrypt; nowhere in the API (including admin customer views) is a
   password or password hash ever returned.
@@ -376,7 +382,7 @@ To report a vulnerability, or for the production deployment checklist, see **[SE
 
 ---
 
-## 9. Extending further
+## 10. Extending further
 
 This is a large, working v1 covering all core and advanced flows end-to-end. Natural next steps:
 push/email notifications wired to a real provider, image uploads for food/restaurant photos
@@ -385,7 +391,7 @@ automated tests around the pricing/wallet/fraud services.
 
 ---
 
-## 10. Contributing
+## 11. Contributing
 
 Issues and pull requests are welcome. For larger changes please open an issue first, keep database
 migrations additive and numbered in order, and never commit secrets (`.env`, API keys, App
@@ -393,6 +399,6 @@ Passwords).
 
 ---
 
-## 11. License
+## 12. License
 
 Released under the [MIT License](LICENSE) © 2026 Vaibhav Chauhan.
