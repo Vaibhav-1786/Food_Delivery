@@ -1,4 +1,4 @@
-# Quickbite — Full-Stack Food Delivery Web Application
+# 🍔 Quickbite — Full-Stack Food Delivery Web Application
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 ![React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61dafb)
